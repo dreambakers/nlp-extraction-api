@@ -6,7 +6,7 @@ var moment = require('moment');
 
 const invokeJob = async (req, res) => {
     try {
-        const jobId = moment().format('YYYY_MM_DD_HH:mm:ss');
+        const jobId = moment().utcOffset(-5).format('YYYY_MM_DD_HH:mm:ss');
         const toInvoke = req.body.properties.toInvoke;
         const handles = req.body.properties.handles.map(
             handleObj => `@${handleObj.handle.trim()}`
