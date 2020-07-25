@@ -20,6 +20,7 @@ def fetch_tweets_from_handles(top_covid_handles,cols,savepath = 'Covid_handle_tw
     cols: columns that you want to save from twitter's response
     savepath : path where you want to save the fetched data.
     '''
+    clear_file(savepath, ','.join(cols))
     for handle in top_covid_handles:
         try:
             for status in tweepy.Cursor(api.user_timeline, screen_name=handle, tweet_mode="extended").items():
