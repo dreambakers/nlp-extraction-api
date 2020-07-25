@@ -20,7 +20,12 @@ def fetch_tweets_from_handles(top_covid_handles,cols,savepath = 'Covid_handle_tw
     cols: columns that you want to save from twitter's response
     savepath : path where you want to save the fetched data.
     '''
-    clear_file(savepath, ','.join(cols))
+
+    # Write headers to file
+    f = open(savepath, "w+")
+    f.write(','.join(cols) + '\n')
+    f.close()
+
     for handle in top_covid_handles:
         try:
             for status in tweepy.Cursor(api.user_timeline, screen_name=handle, tweet_mode="extended").items():
@@ -158,10 +163,11 @@ if __name__ == '__main__':
 
     cols = ['created_at','id','full_text','user_name', 'user_screen_name', 'user_location', 'user_description','lang', 'clean_text', 'usernames', 'hashtags', 'links', 'sentiment',]
     # IF you want to fetch more tweets you can un-comment below line
-    fetch_tweets_from_handles(handles,cols)
+    fetched_tweets_file = f'./output/{job_id}-tweets.csv'
+    fetch_tweets_from_handles(handles,cols,fetched_tweets_file)
 
     # Loading the fetched data
-    df = pd.read_csv('Covid_handle_tweets.csv')
+    df = pd.read_csv(fetched_tweets_file)
     #Information that you want to extract
     info_to_extract=['case','death','hospital','negative',]
 
