@@ -119,9 +119,3 @@ def text_cleaning(text, escape_list=[], stop=['could','would']):
     tokenz=[SnowballStemmer("english").stem(token) if token not in escape_list else token for token in tokenz ]
 
     return ' '.join(tokenz)
-
-def clear_file(filename, to_write=None):
-    f = open(filename, "w+")
-    if to_write is not None:
-        f.write(to_write)
-    f.close()
