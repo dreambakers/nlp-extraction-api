@@ -20,17 +20,10 @@ def fetch_tweets_from_handles(top_covid_handles,cols,savepath = 'Covid_handle_tw
     cols: columns that you want to save from twitter's response
     savepath : path where you want to save the fetched data.
     '''
-
-    limit = 10
-    index = 0
-
     for handle in top_covid_handles:
         try:
             for status in tweepy.Cursor(api.user_timeline, screen_name=handle, tweet_mode="extended").items():
-                if (index == limit):
-                    break
-                get_into_df_profile(status._json)[cols].to_csv(savepath, mode='a',index=False,header=False)
-                index +=1
+                    get_into_df_profile(status._json)[cols].to_csv(savepath, mode='a',index=False,header=False)
         except:
             pass
     print('Fetching Tweets Completed.')
@@ -103,7 +96,7 @@ def get_covid_or_not(data):
     df1 = df[df.is_covid==True].reset_index(drop=True)
     return df1
 
-def extract_possible_features(df1,infos_for_extraction=['case','death','hospital','negative',], savepath='Information_extracted_tweets2.csv'):
+def extract_possible_features(df1,infos_for_extraction=['case','death','hospital','negative',],savepath='Information_extracted_tweets2.csv'):
     '''
     Input:
     dataframe
@@ -123,9 +116,9 @@ def extract_possible_features(df1,infos_for_extraction=['case','death','hospital
     return df1[['full_text']+info_to_extract].iloc[not_na_index,:]
 
 
-def part_1(df,info_to_extract, savepath):
+def part_1(df,info_to_extract,savepath):
     df1 = get_covid_or_not(df)
-    extracted_df = extract_possible_features(df1,info_to_extract, savepath)
+    extracted_df = extract_possible_features(df1,info_to_extract,savepath)
     return extracted_df
 
 
@@ -179,5 +172,5 @@ if __name__ == '__main__':
     if toInvoke == '2' or toInvoke == '3':
         print('Invoking function 2 against job id', job_id)
         part_2_output = part_2(df)
-        with open(f'./output/{job_id}-guidance.txt', "a") as myfile:
-            myfile.write(str(part_2_output))
+        part_2_output[['full_text']].to_csv(f'./output/{job_id}-guidance.csv',index=False)
+        print(part_2_output.full_text)
